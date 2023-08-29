@@ -2,6 +2,7 @@ package com.explain.mindserver.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -15,10 +16,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     private Long id;
-    @NotNull
+    @NotNull @Size(min = 2, max = 32)
     private String username;
-    @NotNull
+    @NotNull @Size(min = 2, max = 255)
     private String displayName;
-    @NotNull
+    @NotNull @Size(min = 2, max = 512) @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$")
     private String password;
 }
