@@ -1,5 +1,6 @@
 package com.explain.mindserver.model;
 
+import com.explain.mindserver.annotation.UniqueUsername;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -16,7 +17,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
     private Long id;
-    @NotNull @Size(min = 2, max = 32)
+    @NotNull(message = "{com.explain.mindserver.model.User.NotNull.message}") @Size(min = 2, max = 32)
+    @UniqueUsername
     private String username;
     @NotNull @Size(min = 2, max = 255)
     private String displayName;
