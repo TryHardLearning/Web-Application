@@ -13,4 +13,5 @@ spring:
     properties:
       javax:
         persistence:
-          mode: none
+          validation:
+            mode: none
