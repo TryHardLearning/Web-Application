@@ -1,49 +1,37 @@
 package com.explain.mindserver.controller;
 
+import com.explain.mindserver.dto.CategoryDTO;
 import com.explain.mindserver.model.Category;
 import com.explain.mindserver.service.ICategoryService;
-import com.explain.mindserver.shared.GenericResponse;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.explain.mindserver.service.ICrudService;
 
-import java.net.URI;
-import java.util.List;
+import org.modelmapper.ModelMapper;
+
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController @RequestMapping("Categories")
-public class CategoryController {
+public class CategoryController extends CrudController<Category, CategoryDTO,Long> {
 
-    private final ICategoryService categoryService;
+    private final ICategoryService service;
 
-    public CategoryController(ICategoryService categoryService) {
-        this.categoryService = categoryService;
+    private final ModelMapper modelMapper;
+
+    public CategoryController(ICategoryService service, ModelMapper modelMapper) {
+        super(Category.class, CategoryDTO.class);
+        this.service = service;
+        this.modelMapper = modelMapper;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Category>> findAll(){
-        return ResponseEntity.ok(categoryService.findAll());
+    @Override
+    protected ICrudService<Category, Long> getService(){
+        return service;
     }
 
-    @PostMapping
-    public ResponseEntity<Category> create(@RequestBody @Valid Category category){
-        categoryService.save(category);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId()).toUri();
-        return ResponseEntity.created(location).body(categoryService.save(category));
+    @Override
+    protected ModelMapper getModelMapper() {
+        return modelMapper;
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Category> findById(@PathVariable("id") Long id){
-        return ResponseEntity.ok(categoryService.findById(id));
-    }
 
-    @GetMapping
-    public ResponseEntity<GenericResponse> delete(Long id){
-        if(categoryService.exists(id)){
-            categoryService.deleteById(id);
-            return ResponseEntity.ok(GenericResponse.builder().message("Success Delete Category").build());
-        }
-
-        return ResponseEntity.internalServerError(GenericResponse.builder().message("Error ID dont exist").build());
-    }
 }

@@ -22,4 +22,9 @@ public class ApiError {
         this.url = url;
         this.validationErrors = validationErrors;
     }
+    public ApiError(String message, String url,int status) {
+        this.status = status;
+        this.message = message;
+        this.url = url;
+    }
 }

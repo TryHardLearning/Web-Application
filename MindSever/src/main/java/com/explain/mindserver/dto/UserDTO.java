@@ -1,22 +1,20 @@
-package com.explain.mindserver.model;
+package com.explain.mindserver.dto;
 
 import com.explain.mindserver.annotation.UniqueUsername;
-import jakarta.persistence.*;
+import com.explain.mindserver.model.User;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.UUID;
+@Data@NoArgsConstructor@AllArgsConstructor@Builder
+public class UserDTO {
 
-@Entity
-@Builder @AllArgsConstructor @NoArgsConstructor @Data
-@Table(name = "UserAccount")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
     private Long id;
+
     @NotNull(message = "{com.explain.mindserver.model.User.NotNull.message}") @Size(min = 2, max = 32)
     @UniqueUsername
     private String username;

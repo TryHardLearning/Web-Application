@@ -1,5 +1,6 @@
 package com.explain.mindserver.controller;
 
+import com.explain.mindserver.dto.UserDTO;
 import com.explain.mindserver.error.ApiError;
 import com.explain.mindserver.model.User;
 import com.explain.mindserver.repository.UserRepository;
@@ -7,6 +8,7 @@ import com.explain.mindserver.service.UserService;
 import com.explain.mindserver.shared.GenericResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -21,13 +23,16 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final ModelMapper modelMapper;
+
+    public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping
-    public GenericResponse createUser(@Valid @RequestBody User user) {
-        userService.save(user);
+    public GenericResponse createUser(@Valid @RequestBody UserDTO userDTO) {
+        userService.save(modelMapper.map(userDTO, User.class));
         return GenericResponse.builder().message("Successful user saved").build();
     }
     @ExceptionHandler({MethodArgumentNotValidException.class})
